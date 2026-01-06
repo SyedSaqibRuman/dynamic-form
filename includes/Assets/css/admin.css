@@ -1,0 +1,266 @@
+/* ======================================================
+ * Dynamic Form – Admin Styles
+ * Modern, WordPress-native
+ * ====================================================== */
+
+
+/* ======================================================
+ * Common Utilities
+ * ====================================================== */
+
+.spinner {
+  float: none;
+  margin-left: 8px;
+}
+
+
+/* ======================================================
+ * Add Form Page
+ * ====================================================== */
+
+#df-add-form-wrapper {
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ccd0d4;
+  border-radius: 8px;
+  max-width: 600px;
+}
+
+#df-add-form-wrapper input[type="text"] {
+  width: 100%;
+  max-width: 400px;
+}
+
+
+/* ======================================================
+ * List Forms Page
+ * ====================================================== */
+
+.df-delete-form {
+  color: #b32d2e;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.df-delete-form:hover {
+  color: #dc3232;
+}
+
+.widefat td code {
+  background: #f6f7f7;
+  padding: 4px 6px;
+  border-radius: 4px;
+}
+
+
+/* ======================================================
+ * Builder Page Layout
+ * ====================================================== */
+
+.df-builder-page {
+  width: auto;
+}
+
+/* Header */
+.df-builder-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.df-builder-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Canvas */
+.df-builder-canvas {
+  display: grid;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+
+/* ======================================================
+ * Builder Field Cards
+ * ====================================================== */
+
+.df-field-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px;
+  cursor: move;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.df-field-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Header */
+.df-field-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.df-field-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1d2327;
+}
+
+.df-field-meta {
+  font-size: 13px;
+  color: #646970;
+  margin-left: 6px;
+}
+
+.df-required {
+  color: #d63638;
+}
+
+/* Actions */
+.df-field-actions a {
+  margin-left: 12px;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.df-field-actions .delete {
+  color: #b32d2e;
+}
+
+
+/* ======================================================
+ * Field Preview
+ * ====================================================== */
+
+.df-field-preview {
+  margin-top: 12px;
+}
+
+.df-field-preview input,
+.df-field-preview textarea,
+.df-field-preview select {
+  width: 100%;
+  background: #f6f7f7;
+}
+
+
+/* ======================================================
+ * Builder Footer
+ * ====================================================== */
+
+.df-builder-footer {
+  margin-top: 32px;
+}
+
+
+/* ======================================================
+ * Modal (Add / Edit Field)
+ * ====================================================== */
+
+#df-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+}
+
+/* Backdrop */
+.df-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* Modal Panel */
+.df-modal-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  width: 460px;
+  max-width: calc(100% - 32px);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header */
+.df-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.df-modal-header h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+/* Body */
+.df-modal-body {
+  padding: 20px;
+}
+
+.df-form-row {
+  margin-bottom: 16px;
+}
+
+.df-form-row label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #1d2327;
+}
+
+.df-form-row label span {
+  font-weight: normal;
+  color: #646970;
+  font-size: 12px;
+}
+
+.df-form-row input[type="text"],
+.df-form-row select {
+  width: 100%;
+}
+
+/* Options row */
+.df-options-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.df-options-row label {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  font-weight: 500;
+}
+
+
+/* Footer */
+.df-modal-footer {
+  padding: 14px 20px;
+  border-top: 1px solid #e0e0e0;
+  background: #f6f7f7;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+input[type="checkbox"] {
+  width: 1.2em;
+  height: 1.2em;
+}

@@ -1,0 +1,212 @@
+/* ======================================================
+ * Dynamic Form – Frontend Styles (CSS Variable Driven)
+ * ====================================================== */
+
+/* ======================================================
+ * FORM WRAPPER
+ * ====================================================== */
+
+.df-form {
+  --df-form-bg: #ffffff;
+  --df-form-color: #000000;
+  --df-form-padding: 24px;
+  --df-form-radius: 6px;
+  --df-field-gap: 16px;
+  --df-form-width: auto;
+
+  background: var(--df-form-bg);
+  color: var(--df-form-color);
+  padding: var(--df-form-padding);
+  border-radius: var(--df-form-radius);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--df-field-gap);
+
+  box-sizing: border-box;
+  max-width: 600px;
+}
+
+/* ======================================================
+ * FIELD WRAPPER (COMMON)
+ * ====================================================== */
+
+.df-field {
+  --df-field-bg: transparent;
+  --df-field-color: inherit;
+  --df-field-padding: 0;
+  --df-field-margin: 0;
+  --df-field-radius: 4px;
+  --df-field-width: 100%;
+
+  background: var(--df-field-bg);
+  color: var(--df-field-color);
+  padding: var(--df-field-padding);
+  margin: var(--df-field-margin);
+  border-radius: var(--df-field-radius);
+  width: var(--df-field-width);
+
+  box-sizing: border-box;
+}
+
+/* ======================================================
+ * LABELS & LEGENDS
+ * ====================================================== */
+
+.df-field label,
+.df-field legend {
+  font-weight: 600;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.df-required {
+  color: #d63638;
+  margin-left: 4px;
+}
+
+/* ======================================================
+ * INPUT BASE
+ * ====================================================== */
+
+.df-input {
+  --df-input-bg: #ffffff;
+  --df-input-color: #000000;
+  --df-input-border-color: #ccd0d4;
+  --df-input-border-radius: 4px;
+  --df-input-padding: 10px;
+  --df-input-font-size: 14px;
+
+  width: 100%;
+  padding: var(--df-input-padding);
+  font-size: var(--df-input-font-size);
+  color: var(--df-input-color);
+  background: var(--df-input-bg);
+
+  border: 1px solid var(--df-input-border-color);
+  border-radius: var(--df-input-border-radius);
+
+  box-sizing: border-box;
+}
+
+/* Textarea specifics */
+.df-input textarea,
+textarea.df-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* ======================================================
+ * SELECT
+ * ====================================================== */
+
+.df-field select.df-input {
+  appearance: auto;
+}
+
+/* ======================================================
+ * RADIO & CHECKBOX
+ * ====================================================== */
+
+.df-options {
+  border: 1px solid var(--df-input-border-color);
+  border-radius: var(--df-input-border-radius);
+  padding: 10px;
+}
+
+.df-options label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: normal;
+  margin-right: 12px;
+  margin-bottom: 6px;
+}
+
+/* ======================================================
+ * SUBHEADING
+ * ====================================================== */
+
+.df-subheading {
+  --df-subheading-font-size: 18px;
+
+  font-size: var(--df-subheading-font-size);
+  margin: 12px 0 6px;
+}
+
+/* ======================================================
+ * SUBMIT BUTTON
+ * ====================================================== */
+
+.df-field-submit {
+  display: flex;
+  justify-content: var(--df-button-align, center);
+}
+
+.df-submit-btn {
+  --df-button-bg: #2271b1;
+  --df-button-color: #ffffff;
+  --df-button-font-size: 16px;
+  --df-button-padding: 10px 22px;
+  --df-button-radius: 4px;
+  --df-button-width: auto;
+
+  background: var(--df-button-bg);
+  color: var(--df-button-color);
+  font-size: var(--df-button-font-size);
+  padding: var(--df-button-padding);
+  border-radius: var(--df-button-radius);
+  width: var(--df-button-width);
+
+  border: none;
+  cursor: pointer;
+}
+
+.df-submit-btn:hover,
+.df-submit-btn:focus {
+  opacity: 0.9;
+}
+
+/* ======================================================
+ * SUCCESS / ERROR MESSAGES
+ * ====================================================== */
+
+.df-form-message {
+  margin-top: 15px;
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.df-form-message.success {
+  background: #ecf7ed;
+  color: #0a4b14;
+}
+
+.df-form-message.error {
+  background: #fbeaea;
+  color: #8a1f11;
+}
+
+/* ======================================================
+ * PREVIEW / EDITOR STATES
+ * ====================================================== */
+
+.df-preview-form .df-field:hover {
+  outline: 2px dashed #2271b1;
+}
+
+.df-preview-form .df-field.is-active {
+  outline: 2px solid #2271b1;
+  outline-offset: 2px;
+}
+
+/* ======================================================
+ * RESPONSIVE SAFETY
+ * ====================================================== */
+
+@media (max-width: 768px) {
+  .df-field {
+    width: 100% !important;
+  }
+}

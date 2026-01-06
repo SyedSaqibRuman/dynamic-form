@@ -1,0 +1,309 @@
+/* ======================================================
+ * Dynamic Form – Style Editor (Optimized)
+ * ====================================================== */
+
+/* ======================================================
+ * Form table controls
+ * ====================================================== */
+.form-table input[type="color"],
+.form-table input[type="number"],
+.form-table select {
+  width: 140px;
+}
+
+.form-table th {
+  width: 240px;
+}
+
+.form-table td {
+  vertical-align: middle;
+}
+
+/* ======================================================
+ * Header
+ * ====================================================== */
+.df-style-form-header {
+  margin: 1rem 0;
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+}
+
+.df-style-form-header h1 {
+  margin: 0;
+}
+
+/* ======================================================
+ * Layout
+ * ====================================================== */
+.df-style-layout {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.df-style-sidebar {
+  position: sticky;
+  top: 32px;
+  align-self: start;
+  height: auto;
+  overflow-y: auto;
+}
+
+/* ======================================================
+ * Sections
+ * ====================================================== */
+.df-style-section {
+  background: #ffffff;
+  border: 1px solid #ccd0d4;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.df-style-section h2 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+/* ======================================================
+ * Action bar
+ * ====================================================== */
+.df-style-actions {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ======================================================
+ * Spinner
+ * ====================================================== */
+#df-style-spinner {
+  float: none;
+  margin-left: 6px;
+}
+
+/* ======================================================
+ * Preview panel
+ * ====================================================== */
+.df-style-preview-panel {
+  background: #ffffff;
+  border: 1px solid #ccd0d4;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* ======================================================
+ * Preview container
+ * ====================================================== */
+.df-style-preview {
+  padding: 15px;
+  background: #f6f7f7;
+  border-radius: 6px;
+  border: 1px dashed #ccd0d4;
+  font-size: 14px;
+  position: relative;
+}
+
+/* ======================================================
+ * FORM PREVIEW (single source of truth)
+ * ====================================================== */
+.df-preview-form {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+
+  background: var(--df-form-bg, #ffffff);
+  color: var(--df-form-color, #000000);
+
+  padding: var(--df-form-padding, 24px);
+  gap: var(--df-field-gap, 16px);
+  border-radius: var(--df-form-radius, 6px);
+
+  box-sizing: border-box;
+}
+
+/* ======================================================
+ * Form selection
+ * ====================================================== */
+.df-style-preview .df-preview-form.is-active {
+  outline: 2px solid #2271b1;
+  outline-offset: 2px;
+}
+
+/* ======================================================
+ * Field base
+ * ====================================================== */
+.df-preview-form .df-field {
+  background: var(--df-field-bg, transparent);
+  color: var(--df-field-font-color, #000000);
+  font-size: var(--df-font-size, 14px);
+
+  padding: var(--df-field-padding, 6px);
+  margin: var(--df-field-margin, 4px);
+  border-radius: var(--df-field-radius, 4px);
+
+  width: var(--df-field-width, 100%);
+  height: var(--df-field-height, auto);
+
+  box-sizing: border-box;
+}
+
+/* ======================================================
+ * Hover & active states
+ * ====================================================== */
+.df-style-preview .df-field:hover {
+  outline: 2px dashed #2271b1;
+}
+
+.df-style-preview .df-field.is-active {
+  outline: 2px solid #2271b1;
+}
+
+/* ======================================================
+ * Labels
+ * ====================================================== */
+.df-preview-form .df-field label,
+.df-preview-form fieldset legend {
+  display: block;
+  margin-bottom: 6px;
+  font-size: var(--df-font-size, 14px);
+  user-select: none;
+}
+
+/* ======================================================
+ * Inputs
+ * ====================================================== */
+.df-preview-form input:not([type="radio"]):not([type="checkbox"]),
+.df-preview-form textarea,
+.df-preview-form select {
+  width: 100%;
+  font-size: var(--df-font-size, 14px);
+  border-radius: var(--df-input-border-radius, 4px);
+  border-color: var(--df-input-border-color, #ccd0d4);
+}
+
+/* ======================================================
+ * Radio & Checkbox
+ * ====================================================== */
+.df-preview-form .df-field-radio fieldset,
+.df-preview-form .df-field-checkbox fieldset {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.df-preview-form .df-field-radio label,
+.df-preview-form .df-field-checkbox label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ======================================================
+ * Subheading
+ * ====================================================== */
+.df-field-subheading {
+  background: var(--df-field-bg, #ffffff);
+  padding: var(--df-field-padding, 12px);
+}
+
+.df-field-subheading .df-subheading {
+  font-size: calc(var(--df-font-size, 14px) + 2px);
+  color: var(--df-field-font-color, #000000);
+}
+
+/* ======================================================
+ * Submit button
+ * ====================================================== */
+.df-form-group.df-field.df-field-submit {
+  display: flex;
+  justify-content: var(--df-button-align, center);
+}
+
+.df-preview-form .df-submit-btn {
+  font-size: var(--df-button-font-size, 18px);
+  background: var(--df-button-bg, #2271b1);
+  color: var(--df-button-color, #ffffff);
+
+  border-radius: var(--df-button-border-radius, 4px);
+  width: var(--df-button-width, 100%);
+  height: var(--df-button-height, 40px);
+  padding: var(--df-button-padding, 10px);
+  margin: var(--df-button-margin, 10px);
+}
+
+.df-preview-form .df-submit-btn:hover,
+.df-preview-form .df-submit-btn:active,
+.df-preview-form .df-submit-btn:focus {
+  background: var(--df-button-bg, #2271b1);
+  cursor: pointer;
+}
+
+/* ======================================================
+ * Responsive (Admin)
+ * ====================================================== */
+@media (max-width: 960px) {
+  .df-style-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .df-style-sidebar {
+    position: static;
+    max-height: none;
+  }
+
+  .df-preview-form .df-field {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 782px) {
+  .df-style-form-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .form-table th {
+    width: auto;
+  }
+
+  .form-table input[type="color"],
+  .form-table input[type="number"],
+  .form-table select {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* ======================================================
+ * Preview animation
+ * ====================================================== */
+.df-style-preview.df-preview-updating {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+@keyframes df-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.df-style-preview.df-preview-updating::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  animation: df-pulse 0.4s ease-in-out;
+}
