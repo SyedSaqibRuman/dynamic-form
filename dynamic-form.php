@@ -35,6 +35,8 @@ require_once DF_PATH . 'includes/Helpers/DF_Response.php';
 
 require_once DF_PATH . 'includes/Admin/DF_AdminMenu.php';
 require_once DF_PATH . 'includes/Admin/DF_AjaxHandlers.php';
+require_once DF_PATH . 'includes/Admin/DF_Settings.php';
+require_once DF_PATH . 'includes/Admin/DF_Mailer.php';
 
 require_once DF_PATH . 'includes/Frontend/DF_Shortcodes.php';
 require_once DF_PATH . 'includes/Frontend/DF_Renderer.php';
@@ -56,11 +58,13 @@ register_deactivation_hook(__FILE__, ['df_Installer', 'deactivate']);
  */
 function df_init_plugin()
 {
+  DF_Mailer::init();
 
   // Admin
   if (is_admin()) {
     DF_AdminMenu::init();
     DF_AjaxHandlers::init();
+    DF_Settings::init();
   }
 
   // Frontend
@@ -73,20 +77,45 @@ function df_init_plugin()
 }
 add_action('plugins_loaded', 'df_init_plugin');
 
+add_action('phpmailer_init', function () {
+  error_log('phpmailer_init FIRED');
+});
+
 
 add_action('wp_enqueue_scripts', function () {
   wp_register_style(
     'df-frontend',
     DF_URL . 'includes/Assets/css/frontend.css',
     [],
-    DF_VERSION
+    filemtime(DF_PATH . 'includes/Assets/css/frontend.css')
   );
 
   wp_register_script(
     'df-frontend',
     DF_URL . 'includes/Assets/js/frontend.js',
     [],
-    DF_VERSION,
+    filemtime(DF_PATH . 'includes/Assets/js/frontend.js'),
+    true
+  );
+
+  wp_localize_script(
+    'df-frontend',
+    'dfFrontend',
+    [
+      'ajax_url' => admin_url('admin-ajax.php'),
+      'nonce'    => wp_create_nonce('df_submit_form'),
+    ]
+  );
+
+  if (!DF_Settings::get('turnstile_enabled')) {
+    return;
+  }
+
+  wp_enqueue_script(
+    'cf-turnstile',
+    'https://challenges.cloudflare.com/turnstile/v0/api.js',
+    [],
+    null,
     true
   );
 });

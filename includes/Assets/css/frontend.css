@@ -1,5 +1,6 @@
 /* ======================================================
- * Dynamic Form – Frontend Styles (CSS Variable Driven)
+ * Dynamic Form – Frontend Styles
+ * CSS Variable Driven (Elementor / Shortcode Safe)
  * ====================================================== */
 
 /* ======================================================
@@ -7,24 +8,32 @@
  * ====================================================== */
 
 .df-form {
+  /* Form variables */
   --df-form-bg: #ffffff;
   --df-form-color: #000000;
   --df-form-padding: 24px;
+  --df-form-margin: 4px;
   --df-form-radius: 6px;
+  --df-form-border: none;
+  --df-form-shadow: none;
   --df-field-gap: 16px;
-  --df-form-width: auto;
+  --df-form-max-width: 100%;
 
   background: var(--df-form-bg);
   color: var(--df-form-color);
+  --df-form-padding: 24px;
   padding: var(--df-form-padding);
+  margin: var(--df-form-margin);
   border-radius: var(--df-form-radius);
+  border: var(--df-form-border);
+  box-shadow: var(--df-form-shadow);
 
   display: flex;
   flex-wrap: wrap;
   gap: var(--df-field-gap);
 
   box-sizing: border-box;
-  max-width: 600px;
+  max-width: var(--df-form-max-width);
 }
 
 /* ======================================================
@@ -32,11 +41,13 @@
  * ====================================================== */
 
 .df-field {
+  /* Field variables */
   --df-field-bg: transparent;
   --df-field-color: inherit;
   --df-field-padding: 0;
   --df-field-margin: 0;
   --df-field-radius: 4px;
+  --df-field-border: none;
   --df-field-width: 100%;
 
   background: var(--df-field-bg);
@@ -44,6 +55,7 @@
   padding: var(--df-field-padding);
   margin: var(--df-field-margin);
   border-radius: var(--df-field-radius);
+  border: var(--df-field-border);
   width: var(--df-field-width);
 
   box-sizing: border-box;
@@ -61,7 +73,7 @@
 }
 
 .df-required {
-  color: #d63638;
+  color: var(--df-required-color, #d63638);
   margin-left: 4px;
 }
 
@@ -70,9 +82,12 @@
  * ====================================================== */
 
 .df-input {
+  /* Input variables */
   --df-input-bg: #ffffff;
   --df-input-color: #000000;
   --df-input-border-color: #ccd0d4;
+  --df-input-focus-border: #2271b1;
+  --df-input-error-border: #d63638;
   --df-input-border-radius: 4px;
   --df-input-padding: 10px;
   --df-input-font-size: 14px;
@@ -89,8 +104,27 @@
   box-sizing: border-box;
 }
 
-/* Textarea specifics */
-.df-input textarea,
+/* Focus */
+.df-input:focus {
+  outline: none;
+  border-color: var(--df-input-focus-border);
+}
+
+/* Focus visible (accessibility) */
+.df-input:focus-visible {
+  outline: 2px solid var(--df-input-focus-border);
+  outline-offset: 2px;
+}
+
+/* Error state */
+.df-field.has-error .df-input {
+  border-color: var(--df-input-error-border);
+}
+
+/* ======================================================
+ * TEXTAREA
+ * ====================================================== */
+
 textarea.df-input {
   resize: vertical;
   min-height: 100px;
@@ -101,7 +135,7 @@ textarea.df-input {
  * ====================================================== */
 
 .df-field select.df-input {
-  appearance: auto;
+  appearance: none;
 }
 
 /* ======================================================
@@ -128,10 +162,28 @@ textarea.df-input {
  * ====================================================== */
 
 .df-subheading {
+  /* Variables */
+  --df-subheading-color: inherit;
+  --df-subheading-bg: transparent;
   --df-subheading-font-size: 18px;
+  --df-subheading-font-weight: 600;
+  --df-subheading-line-height: 1.4;
+  --df-subheading-padding: 0;
+  --df-subheading-margin: 12px 0 6px;
+  --df-subheading-align: left;
+  --df-subheading-radius: 0;
+  --df-subheading-border: none;
 
+  color: var(--df-subheading-color);
+  background: var(--df-subheading-bg);
   font-size: var(--df-subheading-font-size);
-  margin: 12px 0 6px;
+  font-weight: var(--df-subheading-font-weight);
+  line-height: var(--df-subheading-line-height);
+  padding: var(--df-subheading-padding);
+  margin: var(--df-subheading-margin);
+  text-align: var(--df-subheading-align);
+  border-radius: var(--df-subheading-radius);
+  border: var(--df-subheading-border);
 }
 
 /* ======================================================
@@ -144,12 +196,15 @@ textarea.df-input {
 }
 
 .df-submit-btn {
+  /* Button variables */
   --df-button-bg: #2271b1;
   --df-button-color: #ffffff;
+  --df-button-hover-bg: #135e96;
+  --df-button-hover-color: #ffffff;
   --df-button-font-size: 16px;
   --df-button-padding: 10px 22px;
   --df-button-radius: 4px;
-  --df-button-width: auto;
+  --df-button-width: 50%;
 
   background: var(--df-button-bg);
   color: var(--df-button-color);
@@ -162,9 +217,11 @@ textarea.df-input {
   cursor: pointer;
 }
 
+/* Hover / Focus */
 .df-submit-btn:hover,
 .df-submit-btn:focus {
-  opacity: 0.9;
+  background: var(--df-button-hover-bg);
+  color: var(--df-button-hover-color);
 }
 
 /* ======================================================
@@ -179,17 +236,17 @@ textarea.df-input {
 }
 
 .df-form-message.success {
-  background: #ecf7ed;
-  color: #0a4b14;
+  background: var(--df-success-bg, #ecf7ed);
+  color: var(--df-success-color, #0a4b14);
 }
 
 .df-form-message.error {
-  background: #fbeaea;
-  color: #8a1f11;
+  background: var(--df-error-bg, #fbeaea);
+  color: var(--df-error-color, #8a1f11);
 }
 
 /* ======================================================
- * PREVIEW / EDITOR STATES
+ * PREVIEW / EDITOR STATES (Admin / Elementor)
  * ====================================================== */
 
 .df-preview-form .df-field:hover {

@@ -189,6 +189,40 @@ class DF_FormRepository
   }
 
   /**
+   * Get all entries (all forms)
+   */
+  public static function get_all_entries(
+    int $limit = 50,
+    int $offset = 0
+  ): array {
+    global $wpdb;
+
+    return $wpdb->get_results(
+      $wpdb->prepare(
+        "SELECT *
+       FROM " . self::entries_table() . "
+       ORDER BY id DESC
+       LIMIT %d OFFSET %d",
+        $limit,
+        $offset
+      ),
+      ARRAY_A
+    );
+  }
+
+  /**
+   * Get total entry count
+   */
+  public static function count_entries(): int
+  {
+    global $wpdb;
+
+    return (int) $wpdb->get_var(
+      "SELECT COUNT(*) FROM " . self::entries_table()
+    );
+  }
+
+  /**
    * Delete a single entry (GDPR)
    */
   public static function delete_entry(int $entry_id): bool

@@ -1,13 +1,4 @@
 <?php
-
-/**
- * Form Styles Editor
- * Visual style customization with live preview
- *
- * @package DynamicForm
- * @since 1.0.0
- */
-
 defined('ABSPATH') || exit;
 
 // ===================================================

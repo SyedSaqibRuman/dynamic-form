@@ -10,6 +10,7 @@ class DF_AjaxHandlers
     add_action('wp_ajax_df_save_form', [self::class, 'save_form']);
     add_action('wp_ajax_df_save_style', [self::class, 'save_style']);
     add_action('wp_ajax_df_delete_form', [self::class, 'delete_form']);
+    add_action('wp_ajax_df_test_email', [self::class, 'test_email']);
   }
 
   /* =====================================================
@@ -17,6 +18,10 @@ class DF_AjaxHandlers
    * ===================================================== */
   private static function verify(): void
   {
+
+    error_log('Nonce received: ' . ($_POST['_ajax_nonce'] ?? 'MISSING'));
+    error_log('Expected nonce: ' . DF_Nonce::create_admin());
+
     if (!DF_Nonce::verify_admin($_POST['_ajax_nonce'] ?? '')) {
       error_log(DF_Nonce::create_admin() . ">>>>>>>>>>>>>>>>>>>>>>>>FAILED<<<<<<<<<<<<<<<<<<<<<<<<<<<<" . $_POST['_ajax_nonce']);
       DF_Response::security_failed();
@@ -270,11 +275,88 @@ class DF_AjaxHandlers
     return $sanitized;
   }
 
+
+
+  public static function send_mail(
+    string $to,
+    string $subject,
+    string $body,
+    array $cc = []
+  ): bool {
+    require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
+    require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
+    require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
+
+    $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+
+    try {
+      $mail->isSMTP();
+      $mail->Host       = DF_Settings::get('smtp_host');
+      $mail->SMTPAuth   = true;
+      $mail->Username   = DF_Settings::get('smtp_user');
+      $mail->Password   = DF_Settings::get('smtp_pass');
+      $mail->SMTPSecure = DF_Settings::get('smtp_encryption') ?: 'tls';
+      $mail->Port       = (int) DF_Settings::get('smtp_port', 587);
+
+      $mail->setFrom(
+        DF_Settings::get('from_email', $mail->Username),
+        'Dynamic Form'
+      );
+
+      $mail->addAddress($to);
+
+      foreach ($cc as $email) {
+        if (is_email($email)) {
+          $mail->addCC($email);
+        }
+      }
+
+      $mail->isHTML(true);
+      $mail->Subject = $subject;
+      $mail->Body    = nl2br($body);
+
+      return $mail->send();
+    } catch (\Exception $e) {
+      error_log('DF Mail Error: ' . $e->getMessage());
+      return false;
+    }
+  }
+
   /* =====================================================
-   * Save Email SMPT settings
+   * Test Email
    * ===================================================== */
-  public static function save_smtp_settings(): void
+  public static function test_email(): void
   {
+    // error_log('=== test_email() STARTED ===');
     self::verify();
+
+    // error_log('=== PASSED VERIFICATION ===');
+
+    // SAFE option access
+    $to = DF_Settings::get('admin_email');
+
+    // error_log('=== TO EMAIL: ' . $to . ' ===');
+
+    if (!$to || !is_email($to)) {
+      // error_log('=== INVALID EMAIL ===');
+      DF_Response::error('No valid admin email configured');
+      return;
+    }
+
+    $body = "SMTP test successful!\n\n"
+      . "Server: " . DF_Settings::get('smtp_host') . "\n"
+      . "Port: " . DF_Settings::get('smtp_port');
+
+    $sent = self::send_mail(
+      $to,
+      DF_Settings::get('user_subject', 'Dynamic Form – Test Email'),
+      $body,
+      [DF_Settings::get('smtp_user')]
+    );
+    if (!$sent) {
+      DF_Response::error('Failed to send test email');
+    }
+
+    DF_Response::success('✅ Test email sent successfully!');
   }
 }

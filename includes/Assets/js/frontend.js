@@ -6,8 +6,7 @@
  */
 
 document.addEventListener("DOMContentLoaded", () => {
-
-  console.log("I am HERE");
+  console.log(dfFrontend);
   if (typeof dfFrontend === "undefined") return;
 
   document.addEventListener("submit", (e) => {

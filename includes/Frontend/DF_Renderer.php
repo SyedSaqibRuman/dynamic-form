@@ -40,6 +40,18 @@ class DF_Renderer
       <?php endforeach; ?>
 
       <!-- Submit Button -->
+      <?php if (DF_Settings::get('turnstile_enabled')) : ?>
+        <div class="df-form-group df-turnstile">
+          <div
+            class="cf-turnstile"
+            data-sitekey="<?php echo esc_attr(DF_Settings::get('turnstile_site_key')); ?>"
+            <?php if (DF_Settings::get('turnstile_mode') === 'invisible') :
+            ?>
+            data-size="invisible"
+            <?php endif; ?>></div>
+        </div>
+      <?php endif;
+      ?>
       <div
         class="df-form-group df-field df-field-submit"
         data-field-type="submit">

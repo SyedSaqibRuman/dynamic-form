@@ -62,6 +62,15 @@ class DF_AdminMenu
       'df-style-forms',
       [self::class, 'render_style_page']
     );
+
+    add_submenu_page(
+      'df-forms',
+      __('Entries', 'dynamic-form'),
+      __('Entries', 'dynamic-form'),
+      'manage_options',
+      'df-entries',
+      [self::class, 'render_entries_page']
+    );
   }
 
   public static function enqueue_assets($hook)
@@ -154,5 +163,10 @@ class DF_AdminMenu
   public static function render_style_page()
   {
     require DF_PATH . 'includes/Admin/Pages/style-form.php';
+  }
+
+  public static function render_entries_page()
+  {
+    require DF_PATH . 'includes/Admin/Pages/list-entries.php';
   }
 }

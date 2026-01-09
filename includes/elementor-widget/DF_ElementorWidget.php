@@ -67,10 +67,36 @@ class DF_Elementor
    */
   public static function register_widgets($widgets_manager): void
   {
-    require_once DF_PATH . 'includes/elementor-widget/class-df-elementor-widget.php';
+    // require_once DF_PATH . 'includes/elementor-widget/class-df-elementor-widget.php';
 
-    $widgets_manager->register(
-      new DF_Elementor_Widget()
-    );
+    // $widgets_manager->register(
+    //   new DF_Elementor_Widget()
+    // );
+
+    error_log('DF_Elementor: register_widgets called');
+    error_log('Elementor Widget_Base exists: ' . (class_exists('\Elementor\Widget_Base') ? 'YES' : 'NO'));
+
+    $widget_file = DF_PATH . 'includes/elementor-widget/class-df-elementor-widget.php';
+
+    // SAFETY CHECK 1: File exists
+    if (!file_exists($widget_file)) {
+      error_log('DF_Elementor: Widget file not found: ' . $widget_file);
+      return;
+    }
+
+    // SAFETY CHECK 2: Elementor classes loaded
+    if (!class_exists('\Elementor\Widget_Base')) {
+      error_log('DF_Elementor: Elementor\Widget_Base not loaded');
+      return;
+    }
+
+    require_once $widget_file;
+
+    try {
+      $widgets_manager->register(new DF_Elementor_Widget());
+      error_log('DF_Elementor: Widget registered successfully');
+    } catch (Throwable $e) {
+      error_log('DF_Elementor: Widget registration failed: ' . $e->getMessage());
+    }
   }
 }

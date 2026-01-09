@@ -4,6 +4,7 @@ defined('ABSPATH') || exit;
 use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Typography;
+use Elementor\Group_Control_Border;
 
 class DF_Elementor_Widget extends Widget_Base
 {
@@ -37,9 +38,9 @@ class DF_Elementor_Widget extends Widget_Base
 
   protected function register_controls()
   {
-    /* -------------------------------
-     * Form Selection
-     * ------------------------------- */
+    /* =====================================================
+     * FORM SELECTION
+     * ===================================================== */
     $this->start_controls_section(
       'section_form',
       ['label' => __('Form', 'dynamic-form')]
@@ -79,6 +80,29 @@ class DF_Elementor_Widget extends Widget_Base
       ]
     );
 
+    $this->add_control(
+      'form_color',
+      [
+        'label' => __('Color', 'dynamic-form'),
+        'type'  => Controls_Manager::COLOR,
+        'selectors' => [
+          '{{WRAPPER}} .df-form' => '--df-form-color: {{VALUE}};',
+        ],
+      ]
+    );
+
+    $this->add_responsive_control(
+      'form_margin',
+      [
+        'label' => __('Margin', 'dynamic-form'),
+        'type'  => Controls_Manager::DIMENSIONS,
+        'selectors' => [
+          '{{WRAPPER}} .df-form' =>
+          '--df-form-margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+        ],
+      ]
+    );
+
     $this->add_responsive_control(
       'form_padding',
       [
@@ -102,6 +126,18 @@ class DF_Elementor_Widget extends Widget_Base
       ]
     );
 
+    $this->add_control(
+      'form_radius',
+      [
+        'label' => __('Border Radius', 'dynamic-form'),
+        'type'  => Controls_Manager::SLIDER,
+        'selectors' => [
+          '{{WRAPPER}} .df-form' =>
+          '--df-form-radius: {{SIZE}}{{UNIT}};',
+        ],
+      ]
+    );
+
     $this->end_controls_section();
 
     /* =====================================================
@@ -115,6 +151,8 @@ class DF_Elementor_Widget extends Widget_Base
       ]
     );
 
+
+
     $this->add_control(
       'field_bg',
       [
@@ -126,10 +164,23 @@ class DF_Elementor_Widget extends Widget_Base
       ]
     );
 
+
+    $this->add_control(
+      'field_radius',
+      [
+        'label' => __('Field Radius', 'dynamic-form'),
+        'type'  => Controls_Manager::SLIDER,
+        'selectors' => [
+          '{{WRAPPER}} .df-field' =>
+          '--df-field-radius: {{SIZE}}{{UNIT}};',
+        ],
+      ]
+    );
+
     $this->add_responsive_control(
       'field_padding',
       [
-        'label' => __('Field Padding', 'dynamic-form'),
+        'label' => __('Padding', 'dynamic-form'),
         'type'  => Controls_Manager::DIMENSIONS,
         'selectors' => [
           '{{WRAPPER}} .df-field' =>
@@ -141,7 +192,7 @@ class DF_Elementor_Widget extends Widget_Base
     $this->add_responsive_control(
       'field_margin',
       [
-        'label' => __('Field Margin', 'dynamic-form'),
+        'label' => __('Margin', 'dynamic-form'),
         'type'  => Controls_Manager::DIMENSIONS,
         'selectors' => [
           '{{WRAPPER}} .df-field' =>
@@ -149,6 +200,21 @@ class DF_Elementor_Widget extends Widget_Base
         ],
       ]
     );
+
+    //Experimental
+    // $this->add_control('field_width', [
+    //   'label' => __('Width', 'dynamic-form'),
+    //   'type' => Controls_Manager::SLIDER,
+    //   'size_units' => ['px', '%'],  // ← % included
+    //   'range' => [
+    //     'px' => ['min' => 100, 'max' => 500],
+    //     '%' => ['min' => 20, 'max' => 100]  // ← 100% perfects
+    //   ],
+    //   'default' => ['size' => 100, 'unit' => '%'],
+    //   'selectors' => [
+    //     '{{WRAPPER}} .df-field' => '--df-field-width: {{SIZE}}{{UNIT}};'
+    //   ]
+    // ]);
 
     $this->end_controls_section();
 
@@ -166,7 +232,7 @@ class DF_Elementor_Widget extends Widget_Base
     $this->add_control(
       'input_bg',
       [
-        'label' => __('Input Background', 'dynamic-form'),
+        'label' => __('Background', 'dynamic-form'),
         'type'  => Controls_Manager::COLOR,
         'selectors' => [
           '{{WRAPPER}} .df-input' => '--df-input-bg: {{VALUE}};',
@@ -217,6 +283,109 @@ class DF_Elementor_Widget extends Widget_Base
     $this->end_controls_section();
 
     /* =====================================================
+     * SUBHEADING STYLES
+     * ===================================================== */
+    $this->start_controls_section(
+      'section_subheading_style',
+      [
+        'label' => __('Subheading', 'dynamic-form'),
+        'tab'   => Controls_Manager::TAB_STYLE,
+      ]
+    );
+
+    $this->add_group_control(
+      Group_Control_Typography::get_type(),
+      [
+        'name'     => 'subheading_typography',
+        'selector' => '{{WRAPPER}} .df-subheading',
+      ]
+    );
+
+    $this->add_control(
+      'subheading_color',
+      [
+        'label' => __('Text Color', 'dynamic-form'),
+        'type'  => Controls_Manager::COLOR,
+        'selectors' => [
+          '{{WRAPPER}} .df-subheading' => '--df-subheading-color: {{VALUE}};',
+        ],
+      ]
+    );
+
+    $this->add_control(
+      'subheading_bg',
+      [
+        'label' => __('Background', 'dynamic-form'),
+        'type'  => Controls_Manager::COLOR,
+        'selectors' => [
+          '{{WRAPPER}} .df-subheading' => '--df-subheading-bg: {{VALUE}};',
+        ],
+      ]
+    );
+
+    $this->add_control(
+      'subheading_align',
+      [
+        'label' => __('Alignment', 'dynamic-form'),
+        'type'  => Controls_Manager::CHOOSE,
+        'options' => [
+          'left'   => ['title' => __('Left', 'dynamic-form'), 'icon' => 'eicon-text-align-left'],
+          'center' => ['title' => __('Center', 'dynamic-form'), 'icon' => 'eicon-text-align-center'],
+          'right'  => ['title' => __('Right', 'dynamic-form'), 'icon' => 'eicon-text-align-right'],
+        ],
+        'selectors' => [
+          '{{WRAPPER}} .df-subheading' => '--df-subheading-align: {{VALUE}};',
+        ],
+      ]
+    );
+
+    $this->add_responsive_control(
+      'subheading_padding',
+      [
+        'label' => __('Padding', 'dynamic-form'),
+        'type'  => Controls_Manager::DIMENSIONS,
+        'selectors' => [
+          '{{WRAPPER}} .df-subheading' =>
+          '--df-subheading-padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+        ],
+      ]
+    );
+
+    $this->add_responsive_control(
+      'subheading_margin',
+      [
+        'label' => __('Margin', 'dynamic-form'),
+        'type'  => Controls_Manager::DIMENSIONS,
+        'selectors' => [
+          '{{WRAPPER}} .df-subheading' =>
+          '--df-subheading-margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+        ],
+      ]
+    );
+
+    $this->add_group_control(
+      Group_Control_Border::get_type(),
+      [
+        'name'     => 'subheading_border',
+        'selector' => '{{WRAPPER}} .df-subheading',
+      ]
+    );
+
+    $this->add_control(
+      'subheading_radius',
+      [
+        'label' => __('Border Radius', 'dynamic-form'),
+        'type'  => Controls_Manager::SLIDER,
+        'selectors' => [
+          '{{WRAPPER}} .df-subheading' =>
+          '--df-subheading-radius: {{SIZE}}{{UNIT}};',
+        ],
+      ]
+    );
+
+    $this->end_controls_section();
+
+    /* =====================================================
      * BUTTON STYLES
      * ===================================================== */
     $this->start_controls_section(
@@ -239,12 +408,61 @@ class DF_Elementor_Widget extends Widget_Base
     );
 
     $this->add_control(
+      'button_hover_bg',
+      [
+        'label' => __('Hover Background', 'dynamic-form'),
+        'type'  => Controls_Manager::COLOR,
+        'selectors' => [
+          '{{WRAPPER}} .df-submit-btn' => '--df-button-hover-bg: {{VALUE}};',
+        ],
+      ]
+    );
+
+    $this->add_control(
+      'button_radius',
+      [
+        'label' => __('Border Radius', 'dynamic-form'),
+        'type'  => Controls_Manager::SLIDER,
+        'selectors' => [
+          '{{WRAPPER}} .df-submit-btn' =>
+          '--df-button-radius: {{SIZE}}{{UNIT}};',
+        ],
+      ]
+    );
+
+    $this->add_control('button_width', [
+      'label' => __('Width', 'dynamic-form'),
+      'type' => Controls_Manager::SLIDER,
+      'size_units' => ['px', '%'],  // ← % included
+      'range' => [
+        'px' => ['min' => 100, 'max' => 500],
+        '%' => ['min' => 20, 'max' => 100]  // ← 100% perfects
+      ],
+      'default' => ['size' => 100, 'unit' => '%'],
+      'selectors' => [
+        '{{WRAPPER}} .df-submit-btn' => '--df-button-width: {{SIZE}}{{UNIT}};'
+      ]
+    ]);
+
+
+    $this->add_control(
       'button_color',
       [
         'label' => __('Text Color', 'dynamic-form'),
         'type'  => Controls_Manager::COLOR,
         'selectors' => [
           '{{WRAPPER}} .df-submit-btn' => '--df-button-color: {{VALUE}};',
+        ],
+      ]
+    );
+
+    $this->add_control(
+      'button_hover_color',
+      [
+        'label' => __('Hover Color', 'dynamic-form'),
+        'type'  => Controls_Manager::COLOR,
+        'selectors' => [
+          '{{WRAPPER}} .df-submit-btn' => '--df-button-hover-color: {{VALUE}};',
         ],
       ]
     );
