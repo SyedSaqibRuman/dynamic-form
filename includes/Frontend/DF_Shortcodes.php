@@ -69,8 +69,8 @@ class DF_Shortcodes
    */
   public static function enqueue_assets()
   {
-    error_log("---------------------------PATH " . DF_PATH);
-    error_log("---------------------------URL " . DF_URL);
+    // error_log("---------------------------PATH " . DF_PATH);
+    // error_log("---------------------------URL " . DF_URL);
     if (!self::$shortcode_used) {
       return;
     }

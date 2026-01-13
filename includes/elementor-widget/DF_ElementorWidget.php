@@ -73,8 +73,8 @@ class DF_Elementor
     //   new DF_Elementor_Widget()
     // );
 
-    error_log('DF_Elementor: register_widgets called');
-    error_log('Elementor Widget_Base exists: ' . (class_exists('\Elementor\Widget_Base') ? 'YES' : 'NO'));
+    // error_log('DF_Elementor: register_widgets called');
+    // error_log('Elementor Widget_Base exists: ' . (class_exists('\Elementor\Widget_Base') ? 'YES' : 'NO'));
 
     $widget_file = DF_PATH . 'includes/elementor-widget/class-df-elementor-widget.php';
 

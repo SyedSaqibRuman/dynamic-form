@@ -205,9 +205,14 @@ class DF_SubmissionHandler
     /* =====================================================
      * Success
      * ===================================================== */
+    $redirect_url = DF_Settings::get('redirect_url');
+
     DF_Response::success(
       $settings['success_message']
-        ?? __('Thank you! Your submission has been received.', 'dynamic-form')
+        ?? __('Thank you! Your submission has been received.', 'dynamic-form'),
+      !empty($redirect_url)
+        ? ['redirect' => esc_url_raw($redirect_url)]
+        : []
     );
   }
 }

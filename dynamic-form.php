@@ -109,7 +109,7 @@ function df_init_plugin()
 
         foreach ($entries as $entry) {
           $data = json_decode($entry['data'], true) ?: [];
-          error_log($data . ">>>>>>>>>>>");
+          // error_log($data . ">>>>>>>>>>>");
           foreach ($data as $field => $value) {
             fputcsv($out, [
               $entry['id'],
@@ -121,7 +121,7 @@ function df_init_plugin()
               $entry['created_at'],
             ]);
           }
-          error_log($field . ">>>>>>>>>>>" . $value);
+          // error_log($field . ">>>>>>>>>>>" . $value);
         }
 
         fclose($out);

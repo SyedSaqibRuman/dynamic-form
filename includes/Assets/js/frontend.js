@@ -40,6 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
         messageBox.textContent = json.data.message;
 
         form.reset();
+
+        if (json.data?.redirect) {
+          window.location.href = json.data.redirect;
+          return;
+        }
+
+
       })
       .catch(() => {
         messageBox.classList.add("error");

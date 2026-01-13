@@ -72,6 +72,9 @@ class DF_Settings
         ['managed', 'invisible'],
         true
       ) ? $input['turnstile_mode'] : 'managed',
+
+      /* ---------- Redirect ---------- */
+      'redirect_url' => esc_url_raw($input['redirect_url'] ?? ''),
     ];
 
     $existing = get_option(self::OPTION_KEY, []);
@@ -172,7 +175,7 @@ class DF_Settings
                 required
                 name="<?php echo esc_attr(self::OPTION_KEY); ?>[from_email]"
                 value="<?php echo esc_attr($from_email_fallback); ?>"
-                placeholder="<?php esc_html_e('noreply@example.com', 'dynamic-form'); ?>">
+                placeholder="<?php esc_attr__('noreply@example.com', 'dynamic-form'); ?>">
               <p class="description"><?php esc_html_e('Sender email address for outgoing emails.', 'dynamic-form'); ?></p>
             </td>
           </tr>
@@ -333,7 +336,25 @@ class DF_Settings
                 <option value="invisible" <?php selected($settings['turnstile_mode'] ?? 'managed', 'invisible'); ?>>Invisible</option>
               </select>
             </td>
+
+            <!-- ================= REDIRECTION URL SETTINGS ================= -->
+          <tr>
+            <th scope="row">
+              <?php esc_html_e('Form Redirect URL', 'dynamic-form'); ?>
+            </th>
+            <td>
+              <input
+                type="url"
+                name="<?php echo esc_attr(self::OPTION_KEY); ?>[redirect_url]"
+                value="<?php echo esc_url_raw($settings['redirect_url'] ?? ''); ?>"
+                placeholder="<?php echo esc_attr__('https://example.com/thank-you', 'dynamic-form'); ?>"
+                class="regular-text">
+              <p class="description">
+                <?php esc_html_e('Redirect users to this URL after successful submission.', 'dynamic-form'); ?>
+              </p>
+            </td>
           </tr>
+
         </table>
 
         <?php submit_button(); ?>
