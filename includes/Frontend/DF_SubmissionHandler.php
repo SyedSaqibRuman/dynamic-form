@@ -12,17 +12,20 @@ class DF_SubmissionHandler
   public static function handle(): void
   {
     /* =====================================================
-     * Security
+     * Security: Nonce
      * ===================================================== */
     if (!DF_Nonce::verify_frontend($_POST['_df_nonce'] ?? '')) {
       DF_Response::security_failed();
     }
 
+    /* =====================================================
+     * Cloudflare Turnstile
+     * ===================================================== */
     if (DF_Settings::get('turnstile_enabled')) {
 
       $token = $_POST['cf-turnstile-response'] ?? '';
 
-      if (empty($token)) {
+      if (!$token) {
         DF_Response::validation_error(__('Verification failed.', 'dynamic-form'));
       }
 
@@ -43,15 +46,15 @@ class DF_SubmissionHandler
       }
 
       $result = json_decode(wp_remote_retrieve_body($verify), true);
-      error_log("DF_SUBMISSION_HANDLER" . print_r($result, true));
-      error_log("DF_SUBMISSION_HANDLER" . DF_Settings::get('turnstile_secret'));
 
       if (empty($result['success'])) {
         DF_Response::validation_error(__('Bot verification failed.', 'dynamic-form'));
       }
     }
 
-
+    /* =====================================================
+     * Form ID
+     * ===================================================== */
     $form_id = absint($_POST['df_form_id'] ?? 0);
     if (!$form_id) {
       DF_Response::validation_error(__('Invalid form.', 'dynamic-form'));
@@ -74,6 +77,7 @@ class DF_SubmissionHandler
 
     /* =====================================================
      * Sanitize & Validate Input
+     * STORE AS: Label => Value
      * ===================================================== */
     $data       = [];
     $user_email = '';
@@ -98,16 +102,11 @@ class DF_SubmissionHandler
       $raw   = $_POST[$key];
       $value = DF_FormSanitizer::sanitize_field($type, $raw);
 
-      // Field-level validation
+      /* ---------- Required checks ---------- */
       if ($required) {
+
         if ($type === 'email' && !is_email($value)) {
           DF_Response::validation_error(__('Invalid email address.', 'dynamic-form'));
-        }
-
-        if ($type === 'checkbox' && empty($value)) {
-          DF_Response::validation_error(
-            sprintf(__('"%s" is required.', 'dynamic-form'), esc_html($label))
-          );
         }
 
         if ($value === '' || $value === null) {
@@ -117,28 +116,37 @@ class DF_SubmissionHandler
         }
       }
 
-      // Detect user email dynamically
+      /* ---------- Capture user email ---------- */
       if ($type === 'email' && is_email($value)) {
         $user_email = $value;
       }
 
-      $data[$label] = $value;
+      /* ---------- Store as Label => Value ---------- */
+      $label_key = trim(wp_strip_all_tags($label));
+
+      // Prevent overwriting if duplicate labels exist
+      if (isset($data[$label_key])) {
+        $label_key .= ' (' . $id . ')';
+      }
+
+      $data[$label_key] = is_array($value)
+        ? array_map('sanitize_text_field', $value)
+        : $value;
+    }
+
+    if (empty($data)) {
+      DF_Response::validation_error(__('No form data received.', 'dynamic-form'));
     }
 
     /* =====================================================
-     * Email
+     * Email Routing
      * ===================================================== */
-
-    // Recipient priority:
-    // 1. User email (from form)
-    // 2. Form settings email
-    // 3. Admin email
     if (!empty($user_email)) {
       $to = $user_email;
     } elseif (!empty($settings['to_email']) && is_email($settings['to_email'])) {
       $to = sanitize_email($settings['to_email']);
     } else {
-      $to =  DF_Settings::get('smtp_user');
+      $to = DF_Settings::get('smtp_user');
     }
 
     $from = sanitize_email(
@@ -148,7 +156,7 @@ class DF_SubmissionHandler
 
     $subject = sanitize_text_field(
       $settings['subject']
-        ?? __(DF_Settings::get('admin_subject'), 'dynamic-form')
+        ?? __('New Form Submission', 'dynamic-form')
     );
 
     $headers = [
@@ -156,11 +164,9 @@ class DF_SubmissionHandler
       'From: Dynamic Form <' . $from . '>',
     ];
 
-    // CC admin if user email is primary
     $cc = [];
     $admin_email = DF_Settings::get('smtp_user');
     if ($admin_email && $admin_email !== $to) {
-      // $headers[] = 'Cc: ' . $admin_email;
       $cc[] = $admin_email;
     }
 
@@ -185,20 +191,16 @@ class DF_SubmissionHandler
     }
 
     /* =====================================================
-     * Store Entry (Optional)
+     * Store Entry (DB-safe)
      * ===================================================== */
+    $user_agent = substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255);
 
-    if ($settings) {
-
-      error_log("DF_SUBMISSION_HANDLER::I AM SAVING AN ENTRY");
-      DF_FormRepository::save_entry(
-        $form_id,
-        $data,
-        $_SERVER['REMOTE_ADDR'] ?? '',
-        $_SERVER['HTTP_USER_AGENT'] ?? ''
-      );
-    }
-
+    DF_FormRepository::save_entry(
+      $form_id,
+      $data,
+      $_SERVER['REMOTE_ADDR'] ?? '',
+      $user_agent
+    );
 
     /* =====================================================
      * Success
