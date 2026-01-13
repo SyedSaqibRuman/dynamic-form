@@ -65,6 +65,69 @@ function df_init_plugin()
     DF_AdminMenu::init();
     DF_AjaxHandlers::init();
     DF_Settings::init();
+
+    add_action('admin_init', function () {
+
+      if (
+        !is_admin() ||
+        !current_user_can('manage_options') ||
+        !isset($_GET['page'], $_GET['export']) ||
+        $_GET['page'] !== 'df-entries'
+      ) {
+        return;
+      }
+      $export  = sanitize_text_field($_GET['export']);
+      $entries = DF_FormRepository::get_all_entries(10000);
+
+      if ($export === 'json') {
+        nocache_headers();
+        header('Content-Type: application/json; charset=utf-8');
+        header('Content-Disposition: attachment; filename=df-entries.json');
+        echo wp_json_encode($entries, JSON_PRETTY_PRINT);
+        exit;
+      }
+
+      if ($export === 'csv') {
+        nocache_headers();
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=df-entries.csv');
+
+        $out = fopen('php://output', 'w');
+
+        // 🔑 UTF-8 BOM (fix Excel issues)
+        fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
+
+        fputcsv($out, [
+          'Entry ID',
+          'Form ID',
+          'Field',
+          'Value',
+          'IP Address',
+          'User Agent',
+          'Date'
+        ]);
+
+        foreach ($entries as $entry) {
+          $data = json_decode($entry['data'], true) ?: [];
+          error_log($data . ">>>>>>>>>>>");
+          foreach ($data as $field => $value) {
+            fputcsv($out, [
+              $entry['id'],
+              $entry['form_id'],
+              $field,
+              is_array($value) ? implode(', ', $value) : $value,
+              $entry['ip_address'],
+              $entry['user_agent'],
+              $entry['created_at'],
+            ]);
+          }
+          error_log($field . ">>>>>>>>>>>" . $value);
+        }
+
+        fclose($out);
+        exit;
+      }
+    });
   }
 
   // Frontend

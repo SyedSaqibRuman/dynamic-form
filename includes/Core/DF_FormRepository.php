@@ -188,6 +188,28 @@ class DF_FormRepository
     );
   }
 
+
+  /**
+   * check if an entry exits or not
+   */
+  public static function get_entry(int $entry_id): ?array
+  {
+    global $wpdb;
+
+    if ($entry_id <= 0) {
+      return null;
+    }
+
+    return $wpdb->get_row(
+      $wpdb->prepare(
+        "SELECT * FROM " . self::entries_table() . " WHERE id = %d",
+        $entry_id
+      ),
+      ARRAY_A
+    );
+  }
+
+
   /**
    * Get all entries (all forms)
    */

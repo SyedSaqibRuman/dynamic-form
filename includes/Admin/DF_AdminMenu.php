@@ -80,7 +80,8 @@ class DF_AdminMenu
       strpos($hook, 'df-forms') === false &&
       strpos($hook, 'df-add-form') === false &&
       strpos($hook, 'df-builder') === false &&
-      strpos($hook, 'df-style-forms') === false
+      strpos($hook, 'df-style-forms') === false &&
+      strpos($hook, 'df-entries') === false
     ) {
       return;
     }

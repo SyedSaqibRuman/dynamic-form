@@ -36,13 +36,13 @@
  * List Forms Page
  * ====================================================== */
 
-.df-delete-form {
+.df-delete-form .df-delete-entry {
   color: #b32d2e;
   font-weight: 600;
   cursor: pointer;
 }
 
-.df-delete-form:hover {
+.df-delete-form:hover .df-delete-entry {
   color: #dc3232;
 }
 

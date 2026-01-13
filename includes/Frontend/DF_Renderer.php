@@ -47,7 +47,7 @@ class DF_Renderer
             data-sitekey="<?php echo esc_attr(DF_Settings::get('turnstile_site_key')); ?>"
             <?php if (DF_Settings::get('turnstile_mode') === 'invisible') :
             ?>
-            data-size="invisible"
+            data-appearance="interaction-only"
             <?php endif; ?>></div>
         </div>
       <?php endif;

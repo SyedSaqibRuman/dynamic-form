@@ -10,6 +10,7 @@ class DF_AjaxHandlers
     add_action('wp_ajax_df_save_form', [self::class, 'save_form']);
     add_action('wp_ajax_df_save_style', [self::class, 'save_style']);
     add_action('wp_ajax_df_delete_form', [self::class, 'delete_form']);
+    add_action('wp_ajax_df_delete_entry', [self::class, 'delete_entry']);
     add_action('wp_ajax_df_test_email', [self::class, 'test_email']);
   }
 
@@ -19,11 +20,11 @@ class DF_AjaxHandlers
   private static function verify(): void
   {
 
-    error_log('Nonce received: ' . ($_POST['_ajax_nonce'] ?? 'MISSING'));
-    error_log('Expected nonce: ' . DF_Nonce::create_admin());
+    // error_log('Nonce received: ' . ($_POST['_ajax_nonce'] ?? 'MISSING'));
+    // error_log('Expected nonce:>>>>>>>>>>>>>>>>>>>>>>>' . DF_Nonce::create_admin());
 
     if (!DF_Nonce::verify_admin($_POST['_ajax_nonce'] ?? '')) {
-      error_log(DF_Nonce::create_admin() . ">>>>>>>>>>>>>>>>>>>>>>>>FAILED<<<<<<<<<<<<<<<<<<<<<<<<<<<<" . $_POST['_ajax_nonce']);
+      // error_log(DF_Nonce::create_admin() . ">>>>>>>>>>>>>>>>>>>>>>>>FAILED<<<<<<<<<<<<<<<<<<<<<<<<<<<<" . $_POST['_ajax_nonce']);
       DF_Response::security_failed();
     }
 
@@ -227,6 +228,68 @@ class DF_AjaxHandlers
   }
 
   /* =====================================================
+   * Delete an Entry
+   * ===================================================== */
+  public static function delete_entry(): void
+  {
+    error_log("I am here<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    /* ---------- Security ---------- */
+    self::verify();
+
+    if (!current_user_can('manage_options')) {
+      DF_Response::error(
+        __('You do not have permission to delete entries.', 'dynamic-form'),
+        403
+      );
+    }
+
+    /* ---------- Validate Input ---------- */
+    $entry_id = absint($_POST['entry_id'] ?? 0);
+
+    if (!$entry_id) {
+      DF_Response::error(
+        __('Invalid entry ID.', 'dynamic-form'),
+        400
+      );
+    }
+
+    /* ---------- Fetch Entry (for validation + logging) ---------- */
+    $entry = DF_FormRepository::get_entry($entry_id);
+
+    if (!$entry) {
+      DF_Response::error(
+        __('Entry not found.', 'dynamic-form'),
+        404
+      );
+    }
+
+    /* ---------- Delete ---------- */
+    $deleted = DF_FormRepository::delete_entry($entry_id);
+
+    if (!$deleted) {
+      DF_Response::error(
+        __('Failed to delete entry.', 'dynamic-form'),
+        500
+      );
+    }
+
+    /* ---------- Log ---------- */
+    error_log(sprintf(
+      'DF: Entry #%d (Form #%d) deleted by user #%d',
+      $entry_id,
+      (int) $entry['form_id'],
+      get_current_user_id()
+    ));
+
+    /* ---------- Success ---------- */
+    DF_Response::success(
+      __('Entry deleted successfully.', 'dynamic-form')
+    );
+  }
+
+
+
+  /* =====================================================
    * Sanitize Style Values
    * ===================================================== */
   private static function sanitize_styles(array $styles): array
@@ -349,7 +412,7 @@ class DF_AjaxHandlers
 
     $sent = self::send_mail(
       $to,
-      DF_Settings::get('user_subject', 'Dynamic Form – Test Email'),
+      'Dynamic Form - Test Email',
       $body,
       [DF_Settings::get('smtp_user')]
     );

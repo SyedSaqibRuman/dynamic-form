@@ -148,7 +148,7 @@ class DF_SubmissionHandler
 
     $subject = sanitize_text_field(
       $settings['subject']
-        ?? __('New Form Submission', 'dynamic-form')
+        ?? __(DF_Settings::get('admin_subject'), 'dynamic-form')
     );
 
     $headers = [
