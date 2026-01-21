@@ -1,16 +1,15 @@
 /* ======================================================
  * Dynamic Form – Frontend Styles
- * CSS Variable Driven (Elementor / Shortcode Safe)
+ * CSS Variable Driven (Astra / Elementor / Shortcode Safe)
  * ====================================================== */
 
 /* ======================================================
  * FORM WRAPPER
  * ====================================================== */
 
-.df-form {
+.entry-content .df-form {
   /* Form variables */
   --df-form-bg: #ffffff;
-  --df-form-color: #000000;
   --df-form-padding: 24px;
   --df-form-margin: 4px;
   --df-form-radius: 6px;
@@ -18,61 +17,105 @@
   --df-form-shadow: none;
   --df-field-gap: 16px;
   --df-form-max-width: 100%;
+  --df-form-border-type: solid;
+  --df-form-border-width: 0px;
 
   background: var(--df-form-bg);
-  color: var(--df-form-color);
-  --df-form-padding: 24px;
   padding: var(--df-form-padding);
   margin: var(--df-form-margin);
   border-radius: var(--df-form-radius);
   border: var(--df-form-border);
-  box-shadow: var(--df-form-shadow);
-
+  border-style: var(--df-form-border-type, solid);
+  border-width: var(--df-form-border-width, 0px);
+  box-shadow:
+    calc(var(--df-form-shadow-x, 0px)) calc(var(--df-form-shadow-y, 0px)) var(--df-form-shadow-blur, 0px) var(--df-form-shadow-color, transparent);
   display: flex;
   flex-wrap: wrap;
   gap: var(--df-field-gap);
 
-  box-sizing: border-box;
   max-width: var(--df-form-max-width);
+
+}
+
+/* Ensure consistent box sizing */
+.entry-content .df-form,
+.entry-content .df-form * {
+  box-sizing: border-box;
 }
 
 /* ======================================================
  * FIELD WRAPPER (COMMON)
  * ====================================================== */
 
-.df-field {
-  /* Field variables */
+/* ======================================================
+ * FIELD WRAPPER (COMMON)
+ * ====================================================== */
+
+.entry-content .df-form .df-field:not(.df-field-submit) {
+  /* ==================================================
+   * Field Variables
+   * ================================================== */
   --df-field-bg: transparent;
   --df-field-color: inherit;
   --df-field-padding: 0;
   --df-field-margin: 0;
+
   --df-field-radius: 4px;
-  --df-field-border: none;
+
+  --df-field-border-color: transparent;
+  --df-field-border-width: 0px;
+
+  --df-field-shadow-x: 0px;
+  --df-field-shadow-y: 0px;
+  --df-field-shadow-blur: 0px;
+  --df-field-shadow-color: transparent;
+
   --df-field-width: 100%;
 
+  /* ==================================================
+   * Applied Styles
+   * ================================================== */
   background: var(--df-field-bg);
   color: var(--df-field-color);
+
   padding: var(--df-field-padding);
   margin: var(--df-field-margin);
+
   border-radius: var(--df-field-radius);
-  border: var(--df-field-border);
+
+  border-style: solid;
+  border-width: var(--df-field-border-width);
+  border-color: var(--df-field-border-color);
+
+  box-shadow:
+    calc(var(--df-field-shadow-x)) calc(var(--df-field-shadow-y)) var(--df-field-shadow-blur) var(--df-field-shadow-color);
+
   width: var(--df-field-width);
 
   box-sizing: border-box;
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    color 0.25s ease;
 }
 
 /* ======================================================
  * LABELS & LEGENDS
  * ====================================================== */
 
-.df-field label,
-.df-field legend {
+.entry-content .df-form .df-field label,
+.entry-content .df-form .df-field legend {
+  display: block;
   font-weight: 600;
   margin-bottom: 6px;
-  display: block;
+  color: var(--df-label-color, inherit);
+  padding: var(--df-label-padding, inherit);
+  margin: var(--df-label-margin, inherit);
 }
 
-.df-required {
+.entry-content .df-form .df-required {
   color: var(--df-required-color, #d63638);
   margin-left: 4px;
 }
@@ -81,43 +124,49 @@
  * INPUT BASE
  * ====================================================== */
 
-.df-input {
+.entry-content .df-form .df-input {
   /* Input variables */
   --df-input-bg: #ffffff;
   --df-input-color: #000000;
   --df-input-border-color: #ccd0d4;
-  --df-input-focus-border: #2271b1;
+  --df-input-focus-border: #b122a3;
   --df-input-error-border: #d63638;
   --df-input-border-radius: 4px;
+  --df-input-border-width: 0px;
+  --df-input-border-type: solid;
   --df-input-padding: 10px;
   --df-input-font-size: 14px;
 
   width: 100%;
   padding: var(--df-input-padding);
+  margin: var(--df-input-margin, 0px);
   font-size: var(--df-input-font-size);
   color: var(--df-input-color);
   background: var(--df-input-bg);
 
-  border: 1px solid var(--df-input-border-color);
+  border-color: var(--df-input-border-color);
   border-radius: var(--df-input-border-radius);
+  border-width: var(--df-input-border-width, 2px);
+  border-style: var(--df-input-border-type, solid);
 
-  box-sizing: border-box;
+
+  font-family: inherit;
 }
 
 /* Focus */
-.df-input:focus {
+.entry-content .df-form .df-input:focus {
   outline: none;
   border-color: var(--df-input-focus-border);
 }
 
-/* Focus visible (accessibility) */
-.df-input:focus-visible {
+/* Focus visible */
+.entry-content .df-form .df-input:focus-visible {
   outline: 2px solid var(--df-input-focus-border);
   outline-offset: 2px;
 }
 
 /* Error state */
-.df-field.has-error .df-input {
+.entry-content .df-form .df-field.has-error .df-input {
   border-color: var(--df-input-error-border);
 }
 
@@ -125,7 +174,7 @@
  * TEXTAREA
  * ====================================================== */
 
-textarea.df-input {
+.entry-content .df-form textarea.df-input {
   resize: vertical;
   min-height: 100px;
 }
@@ -134,21 +183,22 @@ textarea.df-input {
  * SELECT
  * ====================================================== */
 
-.df-field select.df-input {
+.entry-content .df-form select.df-input {
   appearance: none;
+  -webkit-appearance: none;
 }
 
 /* ======================================================
  * RADIO & CHECKBOX
  * ====================================================== */
 
-.df-options {
+.entry-content .df-form .df-options {
   border: 1px solid var(--df-input-border-color);
   border-radius: var(--df-input-border-radius);
   padding: 10px;
 }
 
-.df-options label {
+.entry-content .df-form .df-options label {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -161,7 +211,7 @@ textarea.df-input {
  * SUBHEADING
  * ====================================================== */
 
-.df-subheading {
+.entry-content .df-form .df-subheading {
   /* Variables */
   --df-subheading-color: inherit;
   --df-subheading-bg: transparent;
@@ -173,6 +223,8 @@ textarea.df-input {
   --df-subheading-align: left;
   --df-subheading-radius: 0;
   --df-subheading-border: none;
+
+
 
   color: var(--df-subheading-color);
   background: var(--df-subheading-bg);
@@ -190,36 +242,70 @@ textarea.df-input {
  * SUBMIT BUTTON
  * ====================================================== */
 
-.df-field-submit {
+.entry-content .df-form .df-field-submit {
+  width: 100%;
   display: flex;
   justify-content: var(--df-button-align, center);
 }
 
-.df-submit-btn {
-  /* Button variables */
+.entry-content .df-form .df-submit-btn {
+  /* ================================
+   * Button variables
+   * ================================ */
   --df-button-bg: #2271b1;
   --df-button-color: #ffffff;
   --df-button-hover-bg: #135e96;
   --df-button-hover-color: #ffffff;
+
   --df-button-font-size: 16px;
   --df-button-padding: 10px 22px;
+  --df-button-margin: 10px 0;
   --df-button-radius: 4px;
   --df-button-width: 50%;
 
+  --df-button-border-color: transparent;
+  --df-button-border-width: 0px;
+  --df-button-border-type: solid;
+
+  --df-button-shadow-x: 0px;
+  --df-button-shadow-y: 0px;
+  --df-button-shadow-blur: 0px;
+  --df-button-shadow-color: transparent;
+
+  /* ================================
+   * Applied styles
+   * ================================ */
   background: var(--df-button-bg);
   color: var(--df-button-color);
   font-size: var(--df-button-font-size);
   padding: var(--df-button-padding);
+  margin: var(--df-button-margin);
   border-radius: var(--df-button-radius);
   width: var(--df-button-width);
 
-  border: none;
+  border-width: var(--df-button-border-width);
+  border-color: var(--df-button-border-color);
+  border-style: var(--df-button-border-type, solid);
+
+  box-shadow:
+    var(--df-button-shadow-x) var(--df-button-shadow-y) var(--df-button-shadow-blur) var(--df-button-shadow-color);
+
+  box-sizing: border-box;
+
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease,
+    color 0.25s ease;
 }
 
 /* Hover / Focus */
-.df-submit-btn:hover,
-.df-submit-btn:focus {
+.entry-content .df-form .df-submit-btn:hover,
+.entry-content .df-form .df-submit-btn:focus {
   background: var(--df-button-hover-bg);
   color: var(--df-button-hover-color);
 }
@@ -228,19 +314,19 @@ textarea.df-input {
  * SUCCESS / ERROR MESSAGES
  * ====================================================== */
 
-.df-form-message {
+.entry-content .df-form .df-form-message {
   margin-top: 15px;
   padding: 10px 14px;
   border-radius: 4px;
   font-size: 14px;
 }
 
-.df-form-message.success {
+.entry-content .df-form .df-form-message.success {
   background: var(--df-success-bg, #ecf7ed);
   color: var(--df-success-color, #0a4b14);
 }
 
-.df-form-message.error {
+.entry-content .df-form .df-form-message.error {
   background: var(--df-error-bg, #fbeaea);
   color: var(--df-error-color, #8a1f11);
 }
@@ -263,7 +349,13 @@ textarea.df-input {
  * ====================================================== */
 
 @media (max-width: 768px) {
-  .df-field {
-    width: 100% !important;
+  .entry-content .df-form .df-field {
+    --df-field-width: 100%;
   }
+}
+
+
+.entry-content .df-form input[type="radio"],
+.entry-content .df-form input[type="checkbox"] {
+  accent-color: var(--df-choice-accent, #2271b1);
 }
