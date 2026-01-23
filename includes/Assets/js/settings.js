@@ -53,4 +53,42 @@
       testBtn.textContent = originalText;
     }
   });
+
+
+  const input = document.getElementById("df-cc-email");
+  const pills = document.getElementById("df-cc-pills");
+
+  if (!input || !pills) return;
+
+  function renderPills() {
+    pills.innerHTML = "";
+
+    const emails = input.value
+      .split(";")
+      .map(e => e.trim())
+      .filter(Boolean);
+
+    emails.forEach((email, index) => {
+      const pill = document.createElement("span");
+      pill.className = "df-cc-pill";
+      pill.textContent = email;
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.innerHTML = "×";
+      remove.title = "Remove";
+
+      remove.addEventListener("click", () => {
+        emails.splice(index, 1);
+        input.value = emails.join("; ");
+        renderPills();
+      });
+
+      pill.appendChild(remove);
+      pills.appendChild(pill);
+    });
+  }
+
+  input.addEventListener("input", renderPills);
+  renderPills();
 })();

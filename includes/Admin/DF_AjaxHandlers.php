@@ -232,7 +232,7 @@ class DF_AjaxHandlers
    * ===================================================== */
   public static function delete_entry(): void
   {
-    error_log("I am here<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+    //error_log("I am here<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     /* ---------- Security ---------- */
     self::verify();
 
@@ -398,6 +398,22 @@ class DF_AjaxHandlers
     // SAFE option access
     $to = DF_Settings::get('admin_email');
 
+    $cc = DF_Settings::get('cc_email');
+
+    $cc_emails = [];
+
+    if (!empty($cc)) {
+      $cc_emails = array_values(
+        array_filter(
+          array_map(
+            'sanitize_email',
+            array_map('trim', explode(';', $cc))
+          ),
+          'is_email'
+        )
+      );
+    }
+
     // error_log('=== TO EMAIL: ' . $to . ' ===');
 
     if (!$to || !is_email($to)) {
@@ -414,7 +430,7 @@ class DF_AjaxHandlers
       $to,
       'Dynamic Form - Test Email',
       $body,
-      [DF_Settings::get('smtp_user')]
+      $cc_emails
     );
     if (!$sent) {
       DF_Response::error('Failed to send test email');

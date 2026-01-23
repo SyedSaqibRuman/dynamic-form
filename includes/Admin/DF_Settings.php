@@ -51,6 +51,20 @@ class DF_Settings
       'admin_subject'       => sanitize_text_field($input['admin_subject'] ?? ''),
       'user_subject'        => sanitize_text_field($input['user_subject'] ?? ''),
 
+      /* ---------- CC Email ---------- */
+      'cc_email' => isset($input['cc_email'])
+        ? implode(
+          ';',
+          array_filter(
+            array_map(
+              'sanitize_email',
+              array_map('trim', explode(';', $input['cc_email']))
+            )
+          )
+        )
+        : '',
+
+
       /* ---------- SMTP ---------- */
       'smtp_enabled'    => !empty($input['smtp_enabled']),
       'smtp_host'       => sanitize_text_field($input['smtp_host'] ?? ''),
@@ -179,6 +193,27 @@ class DF_Settings
               <p class="description"><?php esc_html_e('Sender email address for outgoing emails.', 'dynamic-form'); ?></p>
             </td>
           </tr>
+
+          <tr>
+            <th scope="row"><?php esc_html_e('CC Email(s)', 'dynamic-form'); ?></th>
+            <td>
+              <div class="df-cc-wrapper">
+                <input
+                  type="text"
+                  id="df-cc-email"
+                  class="regular-text"
+                  name="<?php echo esc_attr(self::OPTION_KEY); ?>[cc_email]"
+                  value="<?php echo esc_attr($settings['cc_email'] ?? ''); ?>"
+                  placeholder="cc1@example.com; cc2@example.com" />
+                <div class="df-cc-pills" id="df-cc-pills"></div>
+              </div>
+
+              <p class="description">
+                <?php esc_html_e('Separate multiple email addresses using semicolon (;)', 'dynamic-form'); ?>
+              </p>
+            </td>
+          </tr>
+
 
           <tr>
             <th scope="row"><?php esc_html_e('To Email', 'dynamic-form'); ?></th>

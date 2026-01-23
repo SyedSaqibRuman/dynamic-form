@@ -163,11 +163,27 @@ class DF_SubmissionHandler
       'Content-Type: text/html; charset=UTF-8',
       'From: Dynamic Form <' . $from . '>',
     ];
+    $cc = DF_Settings::get('cc_email');
 
-    $cc = [];
+    $cc_emails = [];
+
+    if (!empty($cc)) {
+      $cc_emails = array_values(
+        array_filter(
+          array_map(
+            'sanitize_email',
+            array_map('trim', explode(';', $cc))
+          ),
+          'is_email'
+        )
+      );
+    }
     $admin_email = DF_Settings::get('smtp_user');
     if ($admin_email && $admin_email !== $to) {
-      $cc[] = $admin_email;
+      array_push(
+        $cc_emails,
+        $admin_email
+      );
     }
 
     /* =====================================================
@@ -186,7 +202,7 @@ class DF_SubmissionHandler
 
     $message .= '</ul>';
 
-    if (!DF_AjaxHandlers::send_mail($to, $subject, $message, $cc)) {
+    if (!DF_AjaxHandlers::send_mail($to, $subject, $message, $cc_emails)) {
       DF_Response::error(__('Email could not be sent.', 'dynamic-form'), 500);
     }
 
